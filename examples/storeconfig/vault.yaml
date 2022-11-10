@@ -1,10 +1,10 @@
-apiVersion: template.upbound.io/v1alpha1
+apiVersion: launchdarkly.upbound.io/v1alpha1
 kind: StoreConfig
 metadata:
   name: vault
 spec:
   type: Vault
-  defaultScope: crossplane-system
+  defaultScope: upbound-system
   vault:
     server: http://vault.vault-system:8200
     mountPath: kv2/
@@ -14,6 +14,6 @@ spec:
       token:
         source: Secret
         secretRef:
-          namespace: crossplane-system
+          namespace: upbound-system
           name: vault-token
           key: token

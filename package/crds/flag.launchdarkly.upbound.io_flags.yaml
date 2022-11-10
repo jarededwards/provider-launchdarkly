@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: resources.null.template.upbound.io
+  name: flags.flag.launchdarkly.upbound.io
 spec:
-  group: null.template.upbound.io
+  group: flag.launchdarkly.upbound.io
   names:
     categories:
     - crossplane
     - managed
-    - template
-    kind: Resource
-    listKind: ResourceList
-    plural: resources
-    singular: resource
+    - launchdarkly
+    kind: Flag
+    listKind: FlagList
+    plural: flags
+    singular: flag
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Resource is the Schema for the Resources API. <no value>
+        description: Flag is the Schema for the Flags API. <no value>
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ResourceSpec defines the desired state of Resource
+            description: FlagSpec defines the desired state of Flag
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,13 +63,110 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  triggers:
-                    additionalProperties:
+                  archived:
+                    description: Whether to archive the flag
+                    type: boolean
+                  clientSideAvailability:
+                    items:
+                      properties:
+                        usingEnvironmentId:
+                          type: boolean
+                        usingMobileKey:
+                          type: boolean
+                      type: object
+                    type: array
+                  customProperties:
+                    items:
+                      properties:
+                        key:
+                          type: string
+                        name:
+                          type: string
+                        value:
+                          items:
+                            type: string
+                          type: array
+                      required:
+                      - key
+                      - name
+                      - value
+                      type: object
+                    type: array
+                  defaults:
+                    description: The default variations used for this flag in new
+                      environments. If omitted, the first and last variation will
+                      be used
+                    items:
+                      properties:
+                        offVariation:
+                          description: The index of the variation served when the
+                            flag is off for new environments
+                          type: number
+                        onVariation:
+                          description: The index of the variation served when the
+                            flag is on for new environments
+                          type: number
+                      required:
+                      - offVariation
+                      - onVariation
+                      type: object
+                    type: array
+                  description:
+                    description: A short description of what the flag will be used
+                      for
+                    type: string
+                  includeInSnippet:
+                    description: Whether or not this flag should be made available
+                      to the client-side JavaScript SDK
+                    type: boolean
+                  key:
+                    description: A unique key that will be used to reference the flag
+                      in your code
+                    type: string
+                  maintainerId:
+                    description: The LaunchDarkly id of the user who will maintain
+                      the flag
+                    type: string
+                  name:
+                    description: A human-friendly name for the feature flag
+                    type: string
+                  projectKey:
+                    description: The LaunchDarkly project key
+                    type: string
+                  tags:
+                    description: Tags associated with your resource
+                    items:
                       type: string
-                    description: A map of arbitrary strings that, when changed, will
-                      force the null resource to be replaced, re-running any associated
-                      provisioners.
-                    type: object
+                    type: array
+                  temporary:
+                    description: Whether or not the flag is a temporary flag
+                    type: boolean
+                  variationType:
+                    description: The uniform type for all variations. Can be either
+                      "boolean", "string", "number", or "json".
+                    type: string
+                  variations:
+                    description: An array of possible variations for the flag
+                    items:
+                      properties:
+                        description:
+                          description: A description for the variation
+                          type: string
+                        name:
+                          description: A name for the variation
+                          type: string
+                        value:
+                          description: The value of the flag for this variation
+                          type: string
+                      required:
+                      - value
+                      type: object
+                    type: array
+                required:
+                - key
+                - name
+                - projectKey
+                - variationType
                 type: object
               providerConfigRef:
                 default:
@@ -243,7 +340,7 @@ spec:
             - forProvider
             type: object
           status:
-            description: ResourceStatus defines the observed state of Resource.
+            description: FlagStatus defines the observed state of Flag.
             properties:
               atProvider:
                 properties:

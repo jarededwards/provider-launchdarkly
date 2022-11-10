@@ -10,12 +10,12 @@ import (
 
 	ujconfig "github.com/upbound/upjet/pkg/config"
 
-	"github.com/upbound/upjet-provider-template/config/null"
+	lFlag "github.com/jarededwards/provider-launchdarkly/config/flag"
 )
 
 const (
-	resourcePrefix = "template"
-	modulePath     = "github.com/upbound/upjet-provider-template"
+	resourcePrefix = "launchdarkly"
+	modulePath     = "github.com/jarededwards/provider-launchdarkly"
 )
 
 //go:embed schema.json
@@ -34,7 +34,7 @@ func GetProvider() *ujconfig.Provider {
 
 	for _, configure := range []func(provider *ujconfig.Provider){
 		// add custom config functions
-		null.Configure,
+		lFlag.Configure,
 	} {
 		configure(pc)
 	}

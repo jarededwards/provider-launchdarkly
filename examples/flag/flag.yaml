@@ -1,0 +1,17 @@
+apiVersion: flag.launchdarkly.upbound.io/v1alpha1
+kind: Flag
+metadata:
+  name: hello-ff
+spec:
+  forProvider:
+    projectKey: default
+    key: "example-ff-test"
+    name: "Example feature flag"
+    variationType: "boolean"
+    variations: 
+      - name: myflag
+        value: "false"
+      - name: myflag2
+        value: "true"
+  providerConfigRef:
+    name: default
